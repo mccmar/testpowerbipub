@@ -1,0 +1,17 @@
+git co nome branch
+
+git pull
+
+git add
+
+git commit
+
+git push origin development
+
+git co qa
+
+da qa: git merge development
+
+git push origin qa
+
+git tag -a rel1.1.0 -m "release 1.1.0" && git push origin rel1.1.0
