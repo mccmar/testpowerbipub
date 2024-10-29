@@ -9,7 +9,7 @@ jobs:
     steps:
       - uses: bthomas2622/copilot-metrics-export-action@v1.2
         with:
-          access-token: ${{ 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}}
+          access-token: ${{ secrets.GH_METRICS_STORE}}
           org-summary: true
           org-name: POC-STF-COMPARISON
       - name: Run a multi-line script
