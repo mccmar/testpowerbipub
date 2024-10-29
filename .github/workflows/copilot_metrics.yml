@@ -11,4 +11,4 @@ jobs:
         with:
           access-token: ${{ secrets.GH_METRICS_STORE}}
           org-summary: true
-          org-name: POC-STF-COMPARISON
+          org-name: mccmar
