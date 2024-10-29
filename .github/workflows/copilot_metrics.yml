@@ -12,7 +12,3 @@ jobs:
           access-token: ${{ secrets.GH_METRICS_STORE}}
           org-summary: true
           org-name: POC-STF-COMPARISON
-      - name: Run a multi-line script
-        run: |
-          echo Add other actions to build,
-          echo test, and deploy your project.
