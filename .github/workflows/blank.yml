@@ -1,0 +1,27 @@
+name: Monitor Repository Activity
+
+on:
+  schedule:
+    - cron: '0 0 * * *' # Esegui ogni giorno a mezzanotte
+  push:
+    branches:
+      - main
+
+jobs:
+  gather_stats:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v2
+
+    - name: Get commit statistics
+      run: |
+        git log --pretty=format:'%h - %an, %ar : %s' > commit_log.txt
+        cat commit_log.txt
+
+    - name: Upload commit log
+      uses: actions/upload-artifact@v2
+      with:
+        name: commit-log
+        path: commit_log.txt
