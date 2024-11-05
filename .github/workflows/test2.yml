@@ -44,9 +44,9 @@ jobs:
 
         async function getMetrics() {
           const [commits, pulls, issues] = await Promise.all([
-            axios.get(`https://api.github.com/repos/${owner}/${repo}/commits`, { headers }),
-            axios.get(`https://api.github.com/repos/${owner}/${repo}/pulls?state=all`, { headers }),
-            axios.get(`https://api.github.com/repos/${owner}/${repo}/issues?state=all`, { headers })
+            axios.get('https://api.github.com/repos/${owner}/${repo}/commits', { headers }),
+            axios.get('https://api.github.com/repos/${owner}/${repo}/pulls?state=all', { headers }),
+            axios.get('https://api.github.com/repos/${owner}/${repo}/issues?state=all', { headers })
           ]);
 
           const metrics = {
