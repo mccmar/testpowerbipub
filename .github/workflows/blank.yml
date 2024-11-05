@@ -21,7 +21,7 @@ jobs:
         cat commit_log.txt
 
     - name: Upload commit log
-      uses: actions/upload-artifact@v2
+      uses: actions/upload-artifact@v3
       with:
         name: commit-log
         path: commit_log.txt
