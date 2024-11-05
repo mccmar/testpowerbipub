@@ -38,15 +38,15 @@ jobs:
         }
 
         const headers = {
-          'Authorization': `token ${token}`,
+          'Authorization': 'token ${token}',
           'Accept': 'application/vnd.github.v3+json'
         };
 
         async function getMetrics() {
           const [commits, pulls, issues] = await Promise.all([
-            axios.get(`https://api.github.com/repos/${owner}/${repo}/commits`, { headers }),
-            axios.get(`https://api.github.com/repos/${owner}/${repo}/pulls?state=all`, { headers }),
-            axios.get(`https://api.github.com/repos/${owner}/${repo}/issues?state=all`, { headers })
+            axios.get('https://api.github.com/repos/${owner}/${repo}/commits', { headers }),
+            axios.get('https://api.github.com/repos/${owner}/${repo}/pulls?state=all', { headers }),
+            axios.get('https://api.github.com/repos/${owner}/${repo}/issues?state=all', { headers })
           ]);
 
           const metrics = {
@@ -55,7 +55,7 @@ jobs:
             issues: issues.data.length
           };
 
-          const csvContent = `Metric,Count\nCommits,${metrics.commits}\nPull Requests,${metrics.pull_requests}\nIssues,${metrics.issues}\n`;
+          const csvContent = 'Metric,Count\nCommits,${metrics.commits}\nPull Requests,${metrics.pull_requests}\nIssues,${metrics.issues}\n';
           fs.writeFileSync('metrics.csv', csvContent);
         }
 
