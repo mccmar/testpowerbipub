@@ -30,8 +30,8 @@ jobs:
         const fs = require('fs');
 
         const token = process.env.GITHUB_TOKEN;
-        const owner = 'OWNER';
-        const repo = 'REPO';
+        const owner = 'mccmar';
+        const repo = 'testpowerbipub';
 
         if (!token) {
           throw new Error('GITHUB_TOKEN is not defined');
