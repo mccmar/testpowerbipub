@@ -55,7 +55,8 @@ jobs:
             issues: issues.data.length
           };
 
-          const csvContent = 'Metric,Count\nCommits,${metrics.commits}\nPull Requests,${metrics.pull_requests}\nIssues,${metrics.issues}\n';
+          const csvContent = 'Metric,Count\nCommits,${metrics.commits}\nPull
+          Requests,${metrics.pull_requests}\nIssues,${metrics.issues}\n';
           fs.writeFileSync('metrics.csv', csvContent);
         }
 
