@@ -1,0 +1,71 @@
+name: Export Repository Metrics
+
+on:
+  schedule:
+    - cron: '0 0 * * *' # Esegui ogni giorno a mezzanotte
+  push:
+    branches:
+      - main
+
+jobs:
+  export_metrics:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v2
+
+    - name: Set up Node.js
+      uses: actions/setup-node@v2
+      with:
+        node-version: '14'
+
+    - name: Install dependencies
+      run: npm install axios
+
+    - name: Collect repository metrics
+      run: |
+        node <<EOF
+        const axios = require('axios');
+        const fs = require('fs');
+
+        const token = process.env.GITHUB_TOKEN;
+        const owner = 'OWNER';
+        const repo = 'REPO';
+
+        const headers = {
+          'Authorization': `token ${token}`,
+          'Accept': 'application/vnd.github.v3+json'
+        };
+
+        async function getMetrics() {
+          const [commits, pulls, issues] = await Promise.all([
+            axios.get(`https://api.github.com/repos/${owner}/${repo}/commits`, { headers }),
+            axios.get(`https://api.github.com/repos/${owner}/${repo}/pulls?state=all`, { headers }),
+            axios.get(`https://api.github.com/repos/${owner}/${repo}/issues?state=all`, { headers })
+          ]);
+
+          const metrics = {
+            commits: commits.data.length,
+            pull_requests: pulls.data.length,
+            issues: issues.data.length
+          };
+
+          const csvContent = `Metric,Count\nCommits,${metrics.commits}\nPull Requests,${metrics.pull_requests}\nIssues,${metrics.issues}\n`;
+          fs.writeFileSync('metrics.csv', csvContent);
+        }
+
+        getMetrics().catch(error => {
+          console.error(error);
+          process.exit(1);
+        });
+        EOF
+
+    - name: Upload metrics
+      uses: actions/upload-artifact@v3
+      with:
+        name: repository-metrics
+        path: metrics.csv
+
+    env:
+      GITHUB_TOKEN: ${{ secrets.GH_METRICS_STORE }}
