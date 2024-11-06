@@ -23,6 +23,15 @@ $repos = $response | ForEach-Object {
 
 
 # Salva i dati in un file CSV
-$repos | Export-Csv -Path "github_repos4.csv" -NoTypeInformation
+#$repos | Export-Csv -Path "github_repos4.csv" -NoTypeInformation
+#Write-Output "Dati esportati con successo in github_repos4.csv"
 
-Write-Output "Dati esportati con successo in github_repos4.csv"
+# Esporta i dati in un file CSV
+$csvFilePath = "github_repos4.csv"
+if ($repos.Count -gt 0) {
+    $repos | Export-Csv -Path $csvFilePath -NoTypeInformation
+} else {
+    "No data available" | Out-File -FilePath $csvFilePath
+}
+
+Write-Output "I dati sono stati esportati in $csvFilePath"
