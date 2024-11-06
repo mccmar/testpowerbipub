@@ -18,6 +18,6 @@ jobs:
       uses: actions/setup-powershell@v1
 
     - name: Run PowerShell script
-      run: pwsh ./script.ps1
+      run: pwsh ./export-metrics-test4.ps1
       env:
         GITHUB_TOKEN: ${{ secrets.GH_METRICS_STORE }}
