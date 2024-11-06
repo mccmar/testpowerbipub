@@ -20,6 +20,6 @@ jobs:
         sudo apt-get install -y powershell
 
     - name: Run PowerShell script
-      run: pwsh ./export-metrics-test4.ps1
+      run: pwsh .github/workflows/export-metrics-test4.ps1
       env:
         GITHUB_TOKEN: ${{ secrets.GH_METRICS_STORE }}
