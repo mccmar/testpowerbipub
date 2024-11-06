@@ -1,4 +1,4 @@
-name: Get Action Runs
+name: Run PowerShell Script to export api result from GH
 
 on:
   push:
@@ -18,34 +18,6 @@ jobs:
       uses: actions/setup-powershell@v1
 
     - name: Run PowerShell script
-      run: |
-        # Fai una richiesta API per ottenere i repository
-        $headers = @{
-          Authorization = "Bearer ${{ secrets.GH_METRICS_STORE }}"
-          Accept = "application/vnd.github.v3+json"
-        }
-        $response = Invoke-RestMethod -Uri "https://api.github.com/repos/mccmar/testpowerbipub/actions/runs" -Headers $headers
-
-        $repos = $response | ForEach-Object {
-            $_.workflow_runs | ForEach-Object {
-                [PSCustomObject]@{
-                    id = $_.id
-                    name = $_.name
-                    status = $_.status
-                    conclusion = $_.conclusion
-                    actor = $_.actor.login
-                    repository = $_.repository.name
-                }
-            }
-        }
-
-        # Esporta i dati in un file CSV
-        $csvFilePath = "workflow_runs.csv"
-        if ($repos.Count -gt 0) {
-            $repos | Export-Csv -Path $csvFilePath -NoTypeInformation
-        } else {
-            "No data available" | Out-File -FilePath $csvFilePath
-        }
-
-        Write-Output "I dati sono stati esportati in $csvFilePath"
-      shell: pwsh
+      run: pwsh ./script.ps1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GH_METRICS_STORE }}
