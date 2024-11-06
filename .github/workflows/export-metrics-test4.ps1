@@ -1,5 +1,5 @@
 ﻿# Configura il tuo token GitHub
-$token = "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"
+$token = ${{ secrets.GH_METRICS_STORE }}
 $headers = @{
     Authorization = "token $token"
     Accept = "application/vnd.github.v3+json"
