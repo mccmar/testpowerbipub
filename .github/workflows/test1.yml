@@ -1,27 +1,51 @@
-name: Monitor Repository Activity
+name: Get Action Runs
 
 on:
-  schedule:
-    - cron: '0 0 * * *' # Esegui ogni giorno a mezzanotte
   push:
     branches:
       - main
+  workflow_dispatch:
 
 jobs:
-  gather_stats:
+  run-script:
     runs-on: ubuntu-latest
 
     steps:
     - name: Checkout repository
       uses: actions/checkout@v2
 
-    - name: Get commit statistics
-      run: |
-        git log --pretty=format:'%h - %an, %ar : %s' > commit_log.txt
-        cat commit_log.txt
+    - name: Set up PowerShell
+      uses: actions/setup-powershell@v1
 
-    - name: Upload commit log
-      uses: actions/upload-artifact@v3
-      with:
-        name: commit-log
-        path: commit_log.txt
+    - name: Run PowerShell script
+      run: |
+        # Fai una richiesta API per ottenere i repository
+        $headers = @{
+          Authorization = "Bearer ${{ secrets.GH_METRICS_STORE }}"
+          Accept = "application/vnd.github.v3+json"
+        }
+        $response = Invoke-RestMethod -Uri "https://api.github.com/repos/mccmar/testpowerbipub/actions/runs" -Headers $headers
+
+        $repos = $response | ForEach-Object {
+            $_.workflow_runs | ForEach-Object {
+                [PSCustomObject]@{
+                    id = $_.id
+                    name = $_.name
+                    status = $_.status
+                    conclusion = $_.conclusion
+                    actor = $_.actor.login
+                    repository = $_.repository.name
+                }
+            }
+        }
+
+        # Esporta i dati in un file CSV
+        $csvFilePath = "workflow_runs.csv"
+        if ($repos.Count -gt 0) {
+            $repos | Export-Csv -Path $csvFilePath -NoTypeInformation
+        } else {
+            "No data available" | Out-File -FilePath $csvFilePath
+        }
+
+        Write-Output "I dati sono stati esportati in $csvFilePath"
+      shell: pwsh
