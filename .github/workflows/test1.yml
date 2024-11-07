@@ -1,17 +1,13 @@
 name: Run PowerShell Script to export api result from GH
 
 on:
-  push:
-    branches:
-      - main
-  workflow_dispatch:
-
-on:
   schedule:
     - cron: '0 0 * * *' # Run every day at midnight
   push:
     branches:
       - main
+  workflow_dispatch:
+  
 
 jobs:
   run-script:
